@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# datasets
+backend/datasets/SasankYadati-Guns-Dataset-0eb7329/Images/*
+backend/datasets/SasankYadati-Guns-Dataset-0eb7329/Labels/*
+
+.idea/*
