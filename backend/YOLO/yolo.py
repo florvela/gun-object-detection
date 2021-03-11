@@ -1,7 +1,6 @@
 import cv2
 import numpy as np 
 import argparse
-import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--webcam', help="True/False", default=False)

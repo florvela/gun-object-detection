@@ -26,11 +26,7 @@ with open(args["config"], "r") as config_file:
 
 input_size = config["model"]["input_size"]
 model_config = config["model"]
-
-if model_config["name"] == "ssd_vgg16":
-    model, label_maps, process_input_fn, image = inference_utils.inference_ssd_vgg16(config, args)
-else:
-    model, label_maps, process_input_fn, image, bboxes, classes = inference_utils.inference_ssd_mobilenetv2(config, args)
+model, label_maps, process_input_fn, image = inference_utils.inference_ssd_vgg16(config, args)
 
 
 model.load_weights(args["weights"])

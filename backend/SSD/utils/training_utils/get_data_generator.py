@@ -1,5 +1,5 @@
 from utils import data_utils
-from tensorflow.keras.applications import vgg16, mobilenet_v2, mobilenet
+from tensorflow.keras.applications import vgg16
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -231,10 +231,7 @@ def get_data_generator(config, args):
         )
         num_validation_samples = len(validation_samples)
 
-    # by default use vgg16
     process_input_fn = vgg16.preprocess_input
-    if model_config["name"] == "ssd_mobilenetv2":
-        process_input_fn = mobilenet_v2.preprocess_input
 
     print("creating data generator for ssd_vgg16")
     training_data_generator = SSD_DATA_GENERATOR(

@@ -2,7 +2,7 @@ import os
 import json
 import argparse
 import tensorflow as tf
-from networks import SSD_VGG16, SSD_MOBILENETV2
+from networks import SSD_VGG16
 
 SUPPORTED_TYPES = [
     "keras",
@@ -36,12 +36,6 @@ model_config = config["model"]
 
 if model_config["name"] == "ssd_vgg16":
     model = SSD_VGG16(
-        config,
-        label_maps,
-        is_training=False,
-        num_predictions=args.num_predictions)
-elif model_config["name"] == "ssd_mobilenetv2":
-    model = SSD_MOBILENETV2(
         config,
         label_maps,
         is_training=False,
