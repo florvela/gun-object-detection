@@ -6,11 +6,11 @@ from utils import inference_utils
 
 
 args = {
-    'input_image': './datasets/merged_dataset/Images/1.jpg',
+    'input_image': '/Users/flor/Desktop/tesis/gun-object-detection/backend/datasets/merged_dataset/Images/45.jpg',
     'config': './configs/vgg16_flor.json',
-    'weights': './output_2/cp_ep_100_loss_17.3806.h5',
+    'weights': '../output_2/cp_ep_100_loss_17.3806.h5',
     'label_maps': ['gun'],
-    'confidence_threshold': 0.9,
+    'confidence_threshold': 0.4,
     'num_predictions': 10,
     'show_class_label': True
 }

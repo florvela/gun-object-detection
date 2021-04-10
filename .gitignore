@@ -130,11 +130,11 @@ dmypy.json
 
 
 # datasets
-backend/datasets/SasankYadati-Guns-Dataset-0eb7329/Images/*
-backend/datasets/SasankYadati-Guns-Dataset-0eb7329/Labels/*
+backend/SSD/datasets/SasankYadati-Guns-Dataset-0eb7329/Images/*
+backend/SSD/datasets/SasankYadati-Guns-Dataset-0eb7329/Labels/*
 
 .idea/*
 
 backend/output/*
-
 .DS_Store
+backend/YOLO/yolov3.weights
