@@ -1,4 +1,3 @@
-from utils import data_utils
 from tensorflow.keras.applications import vgg16, mobilenet_v2, mobilenet
 import cv2
 import numpy as np

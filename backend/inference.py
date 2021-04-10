@@ -6,9 +6,9 @@ from utils import inference_utils
 
 
 args = {
-    'input_image': './datasets/SasankYadati-Guns-Dataset-0eb7329/Images/267.jpeg',
+    'input_image': './datasets/merged_dataset/Images/1.jpg',
     'config': './configs/vgg16_flor.json',
-    'weights': './output/cp_ep_100_loss_39.8607.h5',
+    'weights': './output_2/cp_ep_100_loss_17.3806.h5',
     'label_maps': ['gun'],
     'confidence_threshold': 0.9,
     'num_predictions': 10,
@@ -27,11 +27,12 @@ with open(args["config"], "r") as config_file:
 input_size = config["model"]["input_size"]
 model_config = config["model"]
 
-if model_config["name"] == "ssd_vgg16":
-    model, label_maps, process_input_fn, image = inference_utils.inference_ssd_vgg16(config, args)
-else:
-    model, label_maps, process_input_fn, image, bboxes, classes = inference_utils.inference_ssd_mobilenetv2(config, args)
+model, process_input_fn = inference_utils.inference_ssd_vgg16(config, args)
+image = cv2.imread(args["input_image"])  # read image in bgr format
+image = np.array(image, dtype=np.float)
+image = np.uint8(image)
 
+label_maps = args["label_maps"]
 
 model.load_weights(args["weights"])
 

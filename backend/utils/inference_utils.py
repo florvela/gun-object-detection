@@ -10,7 +10,7 @@ def inference_ssd_mobilenetv2(config, args):
         config,
         args["label_maps"],
         is_training=False,
-        num_predictions=args.num_predictions)
+        num_predictions=args["num_predictions"])
     process_input_fn = mobilenet_v2.preprocess_input
 
     return model, process_input_fn
@@ -21,7 +21,7 @@ def inference_ssd_vgg16(config, args):
         config,
         args["label_maps"],
         is_training=False,
-        num_predictions=args.num_predictions)
+        num_predictions=args["num_predictions"])
     process_input_fn = vgg16.preprocess_input
 
     return model, process_input_fn
