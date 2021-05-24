@@ -2,19 +2,20 @@ import cv2
 import numpy as np 
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--webcam', help="True/False", default=False)
-parser.add_argument('--play_video', help="Tue/False", default=False)
-parser.add_argument('--image', help="Tue/False", default=False)
-parser.add_argument('--video_path', help="Path of video file", default="videos/fire1.mp4")
-parser.add_argument('--image_path', help="Path of image to detect objects", default="Images/bicycle.jpg")
-parser.add_argument('--verbose', help="To print statements", default=True)
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument('--webcam', help="True/False", default=False)
+# parser.add_argument('--play_video', help="Tue/False", default=False)
+# parser.add_argument('--image', help="Tue/False", default=False)
+# parser.add_argument('--video_path', help="Path of video file", default="videos/fire1.mp4")
+# parser.add_argument('--image_path', help="Path of image to detect objects", default="Images/bicycle.jpg")
+# parser.add_argument('--verbose', help="To print statements", default=True)
+# args = parser.parse_args()
 
 
 #Load yolo
 def load_yolo():
-	net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
+	# net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
+	net = cv2.dnn.readNet("yolov4-custom-flor_best.weights", "yolov4-custom-flor.cfg")
 	classes = []
 	with open("obj.names", "r") as f:
 		classes = [line.strip() for line in f.readlines()]
@@ -22,6 +23,10 @@ def load_yolo():
 	layers_names = net.getLayerNames()
 	output_layers = [layers_names[i[0]-1] for i in net.getUnconnectedOutLayers()]
 	colors = np.random.uniform(0, 255, size=(len(classes), 3))
+	colors = np.random.uniform(0, 255, size=40)
+	# print(colors)
+	# print(len(colors))
+	# exit(0)
 	return net, classes, colors, output_layers
 
 def load_image(img_path):
@@ -60,28 +65,33 @@ def get_box_dimensions(outputs, height, width):
 			scores = detect[5:]
 			class_id = np.argmax(scores)
 			conf = scores[class_id]
-			if conf > 0.3:
-				center_x = int(detect[0] * width)
-				center_y = int(detect[1] * height)
-				w = int(detect[2] * width)
-				h = int(detect[3] * height)
-				x = int(center_x - w/2)
-				y = int(center_y - h / 2)
-				boxes.append([x, y, w, h])
-				confs.append(float(conf))
-				class_ids.append(class_id)
+			# if conf > 0.8:
+			center_x = int(detect[0] * width)
+			center_y = int(detect[1] * height)
+			w = int(detect[2] * width)
+			h = int(detect[3] * height)
+			x = int(center_x - w/2)
+			y = int(center_y - h / 2)
+			boxes.append([x, y, w, h])
+			confs.append(float(conf))
+			class_ids.append(class_id)
 	return boxes, confs, class_ids
 			
 def draw_labels(boxes, confs, colors, class_ids, classes, img): 
-	indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)
+	indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.8, 0.4)
+	# print(indexes)
 	font = cv2.FONT_HERSHEY_PLAIN
 	for i in range(len(boxes)):
 		if i in indexes:
 			x, y, w, h = boxes[i]
 			label = str(classes[class_ids[i]])
-			color = colors[i]
+			print(max(confs))
+			color = colors[0]
 			cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
 			cv2.putText(img, label, (x, y - 5), font, 1, color, 1)
+		# elif i >= 3:
+		# 	print(indexes)
+		# 	print(i)
 	img=cv2.resize(img, (800,600))
 	cv2.imshow("Image", img)
 
@@ -103,6 +113,7 @@ def webcam_detect():
 		_, frame = cap.read()
 		height, width, channels = frame.shape
 		blob, outputs = detect_objects(frame, model, output_layers)
+		# print(blob, outputs)
 		boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
 		draw_labels(boxes, confs, colors, class_ids, classes, frame)
 		key = cv2.waitKey(1)
@@ -128,22 +139,27 @@ def start_video(video_path):
 	cap.release()
 
 if __name__ == '__main__':
-	webcam = args.webcam
-	video_play = args.play_video
-	image = args.image
+	# webcam = args.webcam
+	# video_play = args.play_video
+	# image = args.image
+	webcam = 0
+	video_play = 0
+	image = 1
 	if webcam:
-		if args.verbose:
-			print('---- Starting Web Cam object detection ----')
+		# if args.verbose:
+		# 	print('---- Starting Web Cam object detection ----')
 		webcam_detect()
-	if video_play:
-		video_path = args.video_path
-		if args.verbose:
-			print('Opening '+video_path+" .... ")
-		start_video(video_path)
+	# if video_play:
+	# 	video_path = args.video_path
+	# 	if args.verbose:
+	# 		print('Opening '+video_path+" .... ")
+	# 	start_video(video_path)
 	if image:
-		image_path = args.image_path
-		if args.verbose:
-			print("Opening "+image_path+" .... ")
+		image_path = 'images.jpg'
+		# image_path = 'knives.JPG'
+		# image_path = args.image_path
+		# if args.verbose:
+		# 	print("Opening "+image_path+" .... ")
 		image_detect(image_path)
 	
 
