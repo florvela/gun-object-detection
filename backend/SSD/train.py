@@ -2,7 +2,7 @@ import os
 import json
 from tensorflow.keras.optimizers import SGD, Adam
 from utils import ModelCheckpoint
-from utils import data_utils, training_utils, command_line_utils, textboxes_utils
+from utils import training_utils
 
 # args = {
 #     'config': './configs/vgg16_flor.json',
@@ -28,15 +28,15 @@ args = {
     'training_split': './datasets/SasankYadati-Guns-Dataset-0eb7329/train_split_file.csv',
     'validation_split': './datasets/SasankYadati-Guns-Dataset-0eb7329/val_split_file.csv',
     'label_maps': ['gun'],
-    'checkpoint': None, # can be an existing h5 to load weights from and continue training
-    #'checkpoint_type': 'epoch',
+    'checkpoint': None #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
+    'checkpoint_type': 'epoch',
     'checkpoint_frequency': 1,
     'learning_rate': 10e-3,
-    'epochs': 100,
+    'epochs': 1,
     'batch_size': 32,
     'shuffle': True,
     'augment': True,
-    'output_dir': 'output'
+    'output_dir': 'output_3'
 }
 
 assert os.path.exists(args["config"]), "config file does not exist"
