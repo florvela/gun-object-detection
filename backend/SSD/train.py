@@ -23,19 +23,19 @@ from utils import training_utils
 # }
 args = {
     'config': './configs/vgg_19.json',
-    'images_dir': './datasets/SasankYadati-Guns-Dataset-0eb7329/Images/',
-    'labels_dir': './datasets/SasankYadati-Guns-Dataset-0eb7329/Labels/',
-    'training_split': './datasets/SasankYadati-Guns-Dataset-0eb7329/train_split_file.csv',
-    'validation_split': './datasets/SasankYadati-Guns-Dataset-0eb7329/val_split_file.csv',
-    'label_maps': ['gun'],
-    'checkpoint': None #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
+    'images_dir': './datasets/',
+    'labels_dir': './datasets/',
+    'training_split': './datasets/train/train_split_file.txt',
+    'validation_split':  './datasets/valid/train_split_file.txt',
+    'label_maps': ['0', '1', '2'],
+    'checkpoint': None, #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
     'checkpoint_frequency': 1,
     'learning_rate': 10e-3,
-    'epochs': 1,
+    'epochs': 2,
     'batch_size': 32,
     'shuffle': True,
-    'augment': True,
+    'augment': False,
     'output_dir': 'output_3'
 }
 

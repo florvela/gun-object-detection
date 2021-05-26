@@ -18,8 +18,8 @@ def read_sample_txt(image_path, label_path, name='gun'):
     with open(label_path) as f:
         lines = f.readlines()[1:]
         for line in lines:
-            bboxes.append(line.strip('\n').split(' '))
-            classes.append(name)
+            bboxes.append(line.strip('\n').split(',')[:-1])
+            classes.append(line.strip('\n').split(',')[-1])
         f.close()
 
     return np.array(image, dtype=np.float), np.array(bboxes, dtype=np.float), classes

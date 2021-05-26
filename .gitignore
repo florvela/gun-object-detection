@@ -138,3 +138,5 @@ backend/SSD/datasets/SasankYadati-Guns-Dataset-0eb7329/Labels/*
 backend/output/*
 .DS_Store
 backend/YOLO/yolov3.weights
+backend/YOLO/yolov4-custom-flor_best.weights
+backend/SSD/datasets
