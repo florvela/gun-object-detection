@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 from utils import ssd_utils, one_hot_class_label, augmentation_utils
 import os
+import pdb
 # from pathlib2 import Path
 #
 # here = Path(__file__).parent.absolute()
@@ -39,7 +40,7 @@ def get_samples_from_split(split_file, images_dir, labels_dir):
             label_file = os.path.join(labels_dir, label_filename)
             sample = f"{image_file} {label_file}".strip('\n')
             samples.append(sample)
-            assert os.path.isdir(image_file), "image_file {} is not a directory.".format(image_file)
+            assert os.path.isfile(image_file), "image_file {} is not a directory.".format(image_file)
     return samples
 
 
@@ -70,7 +71,7 @@ class SSD_DATA_GENERATOR(tf.keras.utils.Sequence):
         training_config = config["training"]
         model_config = config["model"]
         self.samples = samples
-        print(samples)
+        # print(samples)
         self.model_name = model_config["name"]
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -168,6 +169,8 @@ class SSD_DATA_GENERATOR(tf.keras.utils.Sequence):
                 image_path=image_path,
                 label_path=label_path
             )
+            # pdb.set_trace()
+            # print(bboxes, classes)
 
             if self.perform_augmentation:
                 image, bboxes, classes = self.__augment(

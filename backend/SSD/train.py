@@ -22,7 +22,7 @@ from utils import training_utils
 #     'output_dir': 'output'
 # }
 args = {
-    'config': './configs/vgg_19.json',
+    'config': './configs/vgg16_flor.json',
     'images_dir': './datasets/',
     'labels_dir': './datasets/',
     'training_split': './datasets/train/train_split_file.txt',

@@ -19,7 +19,7 @@ for train_path in train_paths:
                 file_name = line[0]
                 objects = [l.strip('\n') for l in line[1:]]
                 text_file_name = train_path + file_name.strip('.jpg')+'.txt'
-                split_file.write(train_path + file_name +' '+ text_file_name +'\n')
+                split_file.write(train_path + file_name +' '+ train_path+ text_file_name +'\n')
                 # print(objects)
                 with open(text_file_name, 'w') as temp_f:
                     for item in objects:
