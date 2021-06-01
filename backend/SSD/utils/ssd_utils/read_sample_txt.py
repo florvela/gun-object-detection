@@ -9,7 +9,7 @@ import pandas as pd
 def read_sample_txt(image_path, label_path, name='gun'):
     image_path = image_path.strip("\n")
     label_path = label_path.strip("\n")
-    # print(label_path, image_path)
+    print(label_path, image_path)
     assert os.path.exists(image_path), "Image file does not exist."
     assert os.path.exists(label_path), "Label file does not exist."
 
