@@ -19,8 +19,28 @@ for train_path in train_paths:
                 file_name = line[0]
                 objects = [l.strip('\n') for l in line[1:]]
                 text_file_name = file_name.strip('.jpg')+'.txt'
-                split_file.write(train_path + file_name +' '+ train_path+ text_file_name +'\n')
+                split_file.write(train_path + file_name +' '+ text_file_name +'\n')
                 # print(objects)
                 with open(text_file_name, 'w') as temp_f:
                     for item in objects:
                         temp_f.write("%s\n" % item)
+
+# for train_path in train_paths:
+#     files = os.listdir(train_path)
+#
+#     annotation_file = None
+#     images = []
+#     for file in files:
+#         if file.endswith('.jpg'):
+#             images.append(file)
+#
+#     with open(train_path + 'train_split_file.txt', 'w') as split_file:
+#         for file_name in images:
+#             text_file_name = file_name.strip('.jpg') + '.txt'
+#             split_file.write(train_path + file_name + ' ' + train_path + text_file_name + '\n')
+#             # print(objects)
+#             with open(text_file_name, 'w') as temp_f:
+#                 for item in objects:
+#                     temp_f.write("%s\n" % item)
+
+
