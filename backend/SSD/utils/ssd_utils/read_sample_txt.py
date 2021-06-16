@@ -18,10 +18,12 @@ def read_sample_txt(image_path, label_path, name='gun'):
 
     with open(label_path) as f:
         lines = f.readlines()
+        #print("len lines:",len(lines))
         for line in lines:
-            bboxes.append(line.strip('\n').split(',')[:-1])
+            bboxes.append([int(n) for n in line.strip('\n').split(',')[:-1]])
             classes.append(line.strip('\n').split(',')[-1])
         f.close()
     # pdb.set_trace()
+    # print(bboxes,classes)
 
-    return np.array(image, dtype=np.float), np.array(bboxes, dtype=np.float), classes
+    return np.array(image, dtype=np.float), np.array(bboxes, dtype=np.uint8), classes

@@ -30,14 +30,16 @@ args = {
     'label_maps': ['0', '1', '2'],
     'checkpoint': None, #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
-    'checkpoint_frequency': 100,
+    'checkpoint_frequency': 1,
     'learning_rate': 10e-3,
     'epochs': 6000,
     'batch_size': 32,
     'shuffle': True,
     'augment': False,
-    'output_dir': '/content/drive/MyDrive/ssd_train_output' #'output_3'
+    'output_dir': 'output_3'
 }
+
+# https://github.com/Socret360/object-detection-in-keras/tree/master/utils/ssd_utils
 
 assert os.path.exists(args["config"]), "config file does not exist"
 assert os.path.exists(args["images_dir"]), "images_dir does not exist"

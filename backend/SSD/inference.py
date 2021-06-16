@@ -6,7 +6,7 @@ from utils import inference_utils
 
 
 args = {
-    'input_image': '/Users/flor/Desktop/tesis/gun-object-detection/backend/datasets/merged_dataset/Images/45.jpg',
+    'input_image': './datasets/0a4a34cff82148b5_jpg.rf.5c2962aeabcb6d5ea0b6291976ce42c3.jpg',
     'config': './configs/vgg16_flor.json',
     'weights': '../output_2/cp_ep_100_loss_17.3806.h5',
     'label_maps': ['gun'],
