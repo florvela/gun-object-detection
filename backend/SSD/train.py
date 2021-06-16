@@ -30,10 +30,10 @@ args = {
     'label_maps': ['0', '1', '2'],
     'checkpoint': None, #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
-    'checkpoint_frequency': 1,
-    'learning_rate': 10e-3,
+    'checkpoint_frequency': 100,
+    'learning_rate': 0.0001,
     'epochs': 6000,
-    'batch_size': 32,
+    'batch_size': 64,
     'shuffle': True,
     'augment': False,
     'output_dir': 'output_3'
