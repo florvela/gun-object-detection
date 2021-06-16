@@ -36,7 +36,7 @@ args = {
     'batch_size': 32,
     'shuffle': True,
     'augment': False,
-    'output_dir': 'output_3'
+    'output_dir': '/content/drive/MyDrive/ssd_train_output' #'output_3'
 }
 
 assert os.path.exists(args["config"]), "config file does not exist"
