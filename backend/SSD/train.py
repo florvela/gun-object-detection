@@ -57,7 +57,7 @@ training_data_generator, num_training_samples, validation_data_generator, num_va
 model = training_utils.get_model(config, args["label_maps"])
 loss = training_utils.get_loss(config)
 optimizer = SGD(
-            lr=args["learning_rate"],
+            learning_rate=args["learning_rate"],
             momentum=0.9,
             decay=0.0005,
             nesterov=False
