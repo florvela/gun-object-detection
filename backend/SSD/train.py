@@ -36,7 +36,7 @@ args = {
     'batch_size': 64,
     'shuffle': True,
     'augment': False,
-    'output_dir': 'output_3'
+    'output_dir': '/content/drive/MyDrive/ssd_train_output'
 }
 
 # https://github.com/Socret360/object-detection-in-keras/tree/master/utils/ssd_utils
