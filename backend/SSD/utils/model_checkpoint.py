@@ -43,7 +43,7 @@ class ModelCheckpoint(Callback):
                 loss = '%.4f' % loss
                 name = f"cp_ep_{self.epochs+self.initial_epoch}_loss_{loss}.h5"
                 self.model.save_weights(os.path.join(self.output_dir, name))
-                plt.plot(list(range(1, self.epochs+self.initial_epoch+1)), self.losses_by_epoch)
+                plt.plot(list(range(1, self.epochs+(self.initial_epoch/10)+1)), self.losses_by_epoch)
                 plt.title('training loss')
                 plt.ylabel('loss')
                 plt.xlabel('epoch')
