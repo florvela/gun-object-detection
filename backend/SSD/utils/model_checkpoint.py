@@ -20,7 +20,7 @@ class ModelCheckpoint(Callback):
         self.losses_by_iteration = []
         hardcoded_losses = [128,11.7661,8.8221,8.2688,7.9703,7.7830,7.4332,7.2364,7.1183,7.0293,6.9677,6.8250]
         self.plotting_losses_idx = [10,20,30,40,50,60,70,80,90,100,110]
-        self.losses_by_epoch = [int(num) for num in hardcoded_losses]
+        self.losses_by_epoch = [] #[int(num) for num in hardcoded_losses]
 
     def on_batch_end(self, batch, logs={}):
         if self.iteration_frequency is not None:
@@ -45,9 +45,9 @@ class ModelCheckpoint(Callback):
                 loss = '%.4f' % loss
                 name = f"cp_ep_{self.epochs+self.initial_epoch}_loss_{loss}.h5"
                 self.model.save_weights(os.path.join(self.output_dir, name))
-                plt.plot(self.plotting_losses_idx + list(range(1, self.epochs+1)), self.losses_by_epoch)
-                plt.title('training loss')
-                plt.ylabel('loss')
-                plt.xlabel('epoch')
-                plt.savefig(os.path.join(self.output_dir, "log.png"))
+                # plt.plot(list(range(1, self.epochs+1)), self.losses_by_epoch)
+                # plt.title('training loss')
+                # plt.ylabel('loss')
+                # plt.xlabel('epoch')
+                # plt.savefig(os.path.join(self.output_dir, "log.png"))
         self.epochs += 1
