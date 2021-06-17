@@ -10,14 +10,15 @@ class ModelCheckpoint(Callback):
         - output_dir: Path to output directory in which to save the checkpoint.
     """
 
-    def __init__(self, output_dir, epoch_frequency, iteration_frequency):
+    def __init__(self, output_dir, epoch_frequency, iteration_frequency, initial_epoch):
         self.output_dir = output_dir
         self.iteration_frequency = iteration_frequency
         self.epoch_frequency = epoch_frequency
+        self.initial_epoch = initial_epoch
         self.iterations = 1
         self.epochs = 1
         self.losses_by_iteration = []
-        self.losses_by_epoch = []
+        self.losses_by_epoch = [128,11.7661,8.8221,8.2688,7.9703,7.7830,7.4332,7.2364,7.1183,7.0293,6.9677]
 
     def on_batch_end(self, batch, logs={}):
         if self.iteration_frequency is not None:
@@ -40,7 +41,7 @@ class ModelCheckpoint(Callback):
             self.losses_by_epoch.append(loss)
             if self.epochs % self.epoch_frequency == 0:
                 loss = '%.4f' % loss
-                name = f"cp_ep_{self.epochs}_loss_{loss}.h5"
+                name = f"cp_ep_{self.epochs+self.initial_epoch}_loss_{loss}.h5"
                 self.model.save_weights(os.path.join(self.output_dir, name))
                 plt.plot(list(range(1, self.epochs+1)), self.losses_by_epoch)
                 plt.title('training loss')
