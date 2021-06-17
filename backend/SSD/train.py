@@ -32,7 +32,7 @@ args = {
     'checkpoint_type': 'epoch',
     'checkpoint_frequency': 10,
     'learning_rate': 0.0001,
-    'epochs': 300,
+    'epochs': 1000,
     'batch_size': 64,
     'shuffle': True,
     'augment': False,
