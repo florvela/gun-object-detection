@@ -33,7 +33,7 @@ args = {
     'checkpoint_frequency': 10,
     'learning_rate': 0.0001,
     'epochs': 3000,
-    'batch_size': 64,
+    'batch_size': 32,
     'shuffle': True,
     'augment': False,
     'output_dir': '/content/drive/MyDrive/ssd_train_output'
