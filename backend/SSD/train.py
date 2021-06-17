@@ -31,6 +31,7 @@ args = {
     'checkpoint': '/content/drive/MyDrive/ssd_train_output/cp_ep_50_loss_7.7830.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_100_loss_7.3720.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_30_loss_11.7435.h5', #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
     'checkpoint_frequency': 10,
+    'initial_epoch': 50
     'learning_rate': 0.0001,
     'epochs': 3000,
     'batch_size': 32,
@@ -85,6 +86,7 @@ model.fit(
     batch_size=args["batch_size"],
     validation_batch_size=args["batch_size"],
     epochs=args["epochs"],
+    initial_epoch = args["initial_epoch"],
     callbacks=[
         ModelCheckpoint(
             output_dir=args["output_dir"],
