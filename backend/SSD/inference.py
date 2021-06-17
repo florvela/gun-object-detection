@@ -6,11 +6,11 @@ from utils import inference_utils
 
 
 args = {
-    'input_image': './datasets/0a4a34cff82148b5_jpg.rf.5c2962aeabcb6d5ea0b6291976ce42c3.jpg',
+    'input_image': './datasets/valid/0a46f9b3afe642f2_jpg.rf.2fafbef80ef43666251091708e9f1fe0.jpg',
     'config': './configs/vgg16_flor.json',
-    'weights': '../output_2/cp_ep_100_loss_17.3806.h5',
-    'label_maps': ['gun'],
-    'confidence_threshold': 0.4,
+    'weights': './output/cp_ep_170_loss_6.5020.h5',
+    'label_maps': ['0', '1', '2'],
+    'confidence_threshold': 0.1,
     'num_predictions': 10,
     'show_class_label': True
 }
