@@ -1,7 +1,7 @@
 {
     "model": {
         "name": "ssd_vgg16",
-        "input_size": 300,
+        "input_size": 416,
         "extra_box_for_ar_1": true,
         "l2_regularization": 0.0005,
         "kernel_initializer": "he_normal",
