@@ -28,16 +28,16 @@ args = {
     'training_split': './datasets/train/split.txt',
     'validation_split':  './datasets/valid/split.txt',
     'label_maps': ['0', '1', 'Shotgun'],
-    'checkpoint': None, #'/content/drive/MyDrive/ssd_train_output/cp_ep_170_loss_6.5020.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_100_loss_7.3720.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_30_loss_11.7435.h5', #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
+    'checkpoint': '/content/drive/MyDrive/ssd_train_output_64_batches/cp_ep_50_loss_18.1012.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_170_loss_6.5020.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_100_loss_7.3720.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_30_loss_11.7435.h5', #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
     'checkpoint_frequency': 10,
-    'initial_epoch': 0,
+    'initial_epoch': 50,
     'learning_rate': 0.0001,
     'epochs': 1000,
     'batch_size': 64,
     'shuffle': True,
     'augment': False,
-    'output_dir': './output/ssd_train_output_64_batches'
+    'output_dir': '/content/drive/MyDrive/ssd_train_output_64_batches'
 }
 
 # https://github.com/Socret360/object-detection-in-keras/tree/master/utils/ssd_utils
