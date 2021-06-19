@@ -191,8 +191,8 @@ class SSD_DATA_GENERATOR(tf.keras.utils.Sequence):
 
             for i in range(bboxes.shape[0]):
                 bbox = bboxes[i]
-                cx = (((bbox[0] + bbox[2]) / 2) * width_scale) / self.input_size
-                cy = (((bbox[1] + bbox[3]) / 2) * height_scale) / self.input_size
+                cx = (((bbox[0])) * width_scale) / self.input_size
+                cy = (((bbox[1])) * height_scale) / self.input_size
                 width = (abs(bbox[2] - bbox[0]) * width_scale) / self.input_size
                 height = (abs(bbox[3] - bbox[1]) * height_scale) / self.input_size
                 gt_boxes[i] = [cx, cy, width, height]
