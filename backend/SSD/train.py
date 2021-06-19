@@ -27,7 +27,7 @@ args = {
     'labels_dir': './datasets/',
     'training_split': './datasets/train/split.txt',
     'validation_split':  './datasets/valid/split.txt',
-    'label_maps': ['0', '1', '2'],
+    'label_maps': ['0', '1', 'Shotgun'],
     'checkpoint': None, #'/content/drive/MyDrive/ssd_train_output/cp_ep_170_loss_6.5020.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_100_loss_7.3720.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_30_loss_11.7435.h5', #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
     'checkpoint_frequency': 10,
