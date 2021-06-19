@@ -20,6 +20,11 @@ def read_sample_txt(image_path, label_path, name='gun'):
         lines = f.readlines()
         #print("len lines:",len(lines))
         for line in lines:
+            bbox = [int(n) for n in line.strip('\n').split(',')[:-1]]
+            xmin = bbox[0]
+            ymin = bbox[1]
+            xmax = bbox[0] + bbox[2]
+            ymax = bbox[0] + bbox[3]
             bboxes.append([int(n) for n in line.strip('\n').split(',')[:-1]])
             classes.append(line.strip('\n').split(',')[-1])
         f.close()
