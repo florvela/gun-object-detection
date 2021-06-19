@@ -1,4 +1,5 @@
 import os
+import pickle
 from matplotlib import pyplot as plt
 from tensorflow.keras.callbacks import Callback
 
@@ -41,6 +42,9 @@ class ModelCheckpoint(Callback):
         if self.epoch_frequency is not None:
             loss = logs["loss"]
             self.losses_by_epoch.append(loss)
+            loss_file = 'losses_by_epoch.pickle'
+            with open(os.path.join(self.output_dir, loss_file), 'wb') as handle:
+                pickle.dump(self.losses_by_epoch, handle, protocol=pickle.HIGHEST_PROTOCOL)
             if self.epochs % self.epoch_frequency == 0:
                 loss = '%.4f' % loss
                 name = f"cp_ep_{self.epochs+self.initial_epoch}_loss_{loss}.h5"
