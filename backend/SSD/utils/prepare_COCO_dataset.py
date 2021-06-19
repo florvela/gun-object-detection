@@ -60,7 +60,7 @@ with open(os.path.join(args.output_dir, "split.txt"), "w+") as split_file:
         xml_file_name = f"{image_filename[:image_filename.index('.')]}.xml"
         with open(os.path.join(args.output_dir, xml_file_name), "wb+") as xml_file:
             xml_tree.write(xml_file)
-            split_file.write(f"{image_filename} {xml_file_name}\n")
+            split_file.write(f"{args.images_dir}{image_filename} {args.images_dir}{xml_file_name}\n")
             num_samples += 1
     print("-- done")
     print(f"num_samples: {num_samples}")
