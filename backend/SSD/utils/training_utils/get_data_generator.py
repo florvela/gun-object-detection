@@ -165,7 +165,7 @@ class SSD_DATA_GENERATOR(tf.keras.utils.Sequence):
 
         for batch_idx, sample_idx in enumerate(batch):
             image_path, label_path = self.samples[sample_idx].split(" ")
-            image, bboxes, classes = ssd_utils.read_sample_txt(
+            image, bboxes, classes = ssd_utils.read_sample(
                 image_path=image_path,
                 label_path=label_path
             )

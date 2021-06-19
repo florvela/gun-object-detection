@@ -9,15 +9,23 @@ with open(label_path + '.txt') as f:
     lines = f.readlines()
     # print("len lines:",len(lines))
     for line in lines:
-        bboxes.append([int(n) for n in line.strip('\n').split(',')[:-1]])
+        bbox = [int(n) for n in line.strip('\n').split(',')[:-1]]
+        xmin = bbox[0]
+        ymin = bbox[1]
+        xmax = bbox[2]
+        ymax = bbox[3]
+        bboxes.append([xmin, ymin, xmax, ymax])
         classes.append(line.strip('\n').split(',')[-1])
     f.close()
-xmin, ymin, xmax, ymax = bboxes[0]
 
-image = np.array(image, dtype=np.float)
-image = np.uint8(image)
-# cv2.rectangle(image)
-cv2.rectangle(image, pt1=(xmin, ymin), pt2=(xmax, ymax), color=(0, 255, 255), thickness=1)
+for bbox in bboxes:
+    xmin, ymin, xmax, ymax = bbox
+
+    image = np.array(image, dtype=np.float)
+    image = np.uint8(image)
+    # cv2.rectangle(image)
+    cv2.rectangle(image, pt1=(xmin, ymin), pt2=(xmax, ymax), color=(0, 255, 255), thickness=1)
+
 print(np.uint8(bboxes))
 cv2.imshow("image", image)
 if cv2.waitKey(0) == ord('q'):

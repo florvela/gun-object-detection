@@ -8,7 +8,7 @@ from utils import inference_utils
 args = {
     'input_image': './datasets/valid/0a46f9b3afe642f2_jpg.rf.2fafbef80ef43666251091708e9f1fe0.jpg',
     'config': './configs/vgg16_flor.json',
-    'weights': './output/cp_ep_170_loss_6.5020.h5',
+    'weights': './output/cp_ep_100_loss_7.3720.h5',
     'label_maps': ['0', '1', '2'],
     'confidence_threshold': 0.1,
     'num_predictions': 10,
@@ -47,7 +47,7 @@ image = process_input_fn(image)
 image = np.expand_dims(image, axis=0)
 y_pred = model.predict(image)
 
-
+print(y_pred[0])
 for i, pred in enumerate(y_pred[0]):
     classname = label_maps[int(pred[0]) - 1].upper()
     confidence_score = pred[1]

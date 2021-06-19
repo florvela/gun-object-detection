@@ -23,9 +23,9 @@ def read_sample_txt(image_path, label_path, name='gun'):
             bbox = [int(n) for n in line.strip('\n').split(',')[:-1]]
             xmin = bbox[0]
             ymin = bbox[1]
-            xmax = bbox[0] + bbox[2]
-            ymax = bbox[0] + bbox[3]
-            bboxes.append([int(n) for n in line.strip('\n').split(',')[:-1]])
+            xmax = bbox[2]
+            ymax = bbox[3]
+            bboxes.append([xmin,ymin,xmax,ymax])
             classes.append(line.strip('\n').split(',')[-1])
         f.close()
     # pdb.set_trace()
