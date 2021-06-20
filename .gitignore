@@ -140,3 +140,4 @@ backend/output/*
 backend/YOLO/yolov3.weights
 backend/YOLO/yolov4-custom-flor_best.weights
 backend/SSD/datasets
+backend/SSD/output
