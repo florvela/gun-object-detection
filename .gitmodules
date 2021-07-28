@@ -1,0 +1,3 @@
+[submodule "training/darknet"]
+	path = training/darknet
+	url = https://github.com/florvela/darknet.git
