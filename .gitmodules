@@ -1,6 +1,4 @@
-[submodule "training/darknet"]
-	path = training/darknet
-	url = https://github.com/florvela/darknet.git
+
 [submodule "training/YOLO/darknet"]
 	path = training/YOLO/darknet
 	url = https://github.com/florvela/darknet.git
