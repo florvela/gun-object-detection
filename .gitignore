@@ -139,5 +139,5 @@ backend/output/*
 .DS_Store
 backend/YOLO/yolov3.weights
 backend/YOLO/yolov4-custom-flor_best.weights
-backend/SSD/datasets
-backend/SSD/output
+training/SSD/datasets
+training/SSD/output
