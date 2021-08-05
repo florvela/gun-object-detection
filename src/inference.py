@@ -5,11 +5,11 @@ import cv2
 import os
 import json
 import numpy as np
-from utils import inference_utils
+from ssd_utils.utils import inference_utils
 
 args = {
     'input_image': 'test4.jpg',
-    'config': './configs/vgg16_flor.json',
+    'config': './ssd_utils/configs/vgg16_flor.json',
     'weights': 'cp_ep_300_loss_7.1364.h5',
     'label_maps': ['KNIFE', 'SHOTGUN', 'RIFLE'],
     'confidence_threshold': 0.7,
@@ -83,7 +83,7 @@ for img in images:
             ymin = max(int(pred[3] / height_scale), 1)
             xmax = min(int(pred[4] / width_scale), image_width-1)
             ymax = min(int(pred[5] / height_scale), image_height-1)
-
+            print([xmin,ymin,xmax,ymax])
             cv2.putText(
                 display_image,
                 score,
