@@ -144,3 +144,4 @@ training/SSD/output
 cp_ep_*
 *.weights
 *.h5
+*.jpg
