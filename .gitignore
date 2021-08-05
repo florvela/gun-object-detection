@@ -141,3 +141,6 @@ backend/YOLO/yolov3.weights
 backend/YOLO/yolov4-custom-flor_best.weights
 training/SSD/datasets
 training/SSD/output
+cp_ep_*
+*.weights
+*.h5
