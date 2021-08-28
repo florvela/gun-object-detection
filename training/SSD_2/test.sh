@@ -1,9 +1,9 @@
 python test.py \
-/Users/socretlee/CodingDrive/other/object-detection-in-keras/data/easy_example_tests/test.txt \
-/Users/socretlee/CodingDrive/other/object-detection-in-keras/data/easy_example_tests/images \
-/Users/socretlee/CodingDrive/other/object-detection-in-keras/data/easy_example_tests/labels \
-configs/ssd300_vgg16_pascal-voc-2007.json \
-/Users/socretlee/CodingDrive/other/object-detection-in-keras/data/cp_275_loss-3.30_valloss-3.84.h5 \
---label_maps=/Users/socretlee/CodingDrive/other/object-detection-in-keras/data/easy_example_tests/label_maps.txt \
---output_dir=/Users/socretlee/CodingDrive/other/object-detection-in-keras/output/cp_275_loss-3.30_valloss-3.84.h5 \
+datasets/training_ready/test.txt \
+datasets/training_ready/images \
+datasets/training_ready/labels \
+configs/ssd300_vgg16_pascal-voc-07-12.json \
+/content/drive/MyDrive/testing_pascal/cp_17_loss-5.91_valloss-5.78.h5 \
+--label_maps=datasets/training_ready/label_maps.txt \
+--output_dir=output/flor_v1 \
 --num_predictions=3
