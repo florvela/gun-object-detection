@@ -20,7 +20,7 @@ args = {
     'batch_size': 3, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
     'shuffle': True,
     'augment': True,
-    'output_dir': '/content/drive/MyDrive/ssd_train_output_3_batches_augmented'
+    'output_dir': './output/ssd_3_batches'
 }
 
 # https://github.com/Socret360/object-detection-in-keras/tree/master/utils/ssd_utils
