@@ -83,7 +83,7 @@ for i, sample in enumerate(list(glob(os.path.join(test_dir, "*xml")))):
 
 print(f"-- writing label_maps.txt")
 with open(os.path.join(args.output_dir, "label_maps.txt"), "w") as label_maps_file:
-    labels = ['0','1','Shotgun']
+    labels = ['pistol']
     for classname in labels:
         label_maps_file.write(f"{classname}\n")
 
