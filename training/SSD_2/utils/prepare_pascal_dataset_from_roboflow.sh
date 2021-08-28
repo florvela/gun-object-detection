@@ -1,1 +1,1 @@
-python3 prepare_pascal_dataset_from_roboflow.py ../datasets/gunv3.v1i.voc ../datasets/gunv3.v1i.voc/training_ready
+python3 prepare_pascal_dataset_from_roboflow.py ../datasets ../datasets/training_ready
