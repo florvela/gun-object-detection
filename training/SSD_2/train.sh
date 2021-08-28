@@ -10,4 +10,4 @@ datasets/training_ready/labels \
 --batch_size=32 \
 --shuffle=True \
 --augment=True \
---output_dir=/content/drive/MyDrive/testing_pascal
+--output_dir=output

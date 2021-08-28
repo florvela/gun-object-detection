@@ -74,7 +74,8 @@ elif model_config["name"] == "ssd_vgg16":
             save_weights_only=False,
             save_best_only=True,
             monitor='loss' if args.validation_split is None else 'val_loss',
-            mode='min'
+            mode='min',
+            epoch_frequency=10
         ),
         CSVLogger(
             os.path.join(args.output_dir, "training.csv"),
