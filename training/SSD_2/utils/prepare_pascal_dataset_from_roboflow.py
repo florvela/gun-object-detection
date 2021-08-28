@@ -28,8 +28,15 @@ with open(os.path.join(args.output_dir, "val.txt"), "w") as train_split_file:
         train_split_file.write(f"{sample}.jpg {sample}.xml\n")
 
 
+print(f"---- test.txt")
+with open(os.path.join(args.output_dir, "test.txt"), "w") as train_split_file:
+    for sample in [f.strip(".jpg") for f in os.listdir(os.path.join(args.dataset_dir, "test")) if f.endswith(".jpg")]:
+        train_split_file.write(f"{sample}.jpg {sample}.xml\n")
+
+
 train_dir = os.path.join(args.dataset_dir, "train")
 valid_dir = os.path.join(args.dataset_dir, "valid")
+test_dir = os.path.join(args.dataset_dir, "test")
 print(f"-- copying images")
 for i, sample in enumerate(list(glob(os.path.join(train_dir, "*jpg")))):
     filename = os.path.basename(sample)
@@ -45,6 +52,13 @@ for i, sample in enumerate(list(glob(os.path.join(valid_dir, "*jpg")))):
         os.path.join(out_images_dir, filename)
     )
 
+for i, sample in enumerate(list(glob(os.path.join(test_dir, "*jpg")))):
+    filename = os.path.basename(sample)
+    shutil.copy(
+        sample,
+        os.path.join(out_images_dir, filename)
+    )
+
 print(f"-- copying labels")
 for i, sample in enumerate(list(glob(os.path.join(train_dir, "*xml")))):
     filename = os.path.basename(sample)
@@ -54,6 +68,13 @@ for i, sample in enumerate(list(glob(os.path.join(train_dir, "*xml")))):
     )
 
 for i, sample in enumerate(list(glob(os.path.join(valid_dir, "*xml")))):
+    filename = os.path.basename(sample)
+    shutil.copy(
+        sample,
+        os.path.join(out_labels_dir, filename)
+    )
+
+for i, sample in enumerate(list(glob(os.path.join(test_dir, "*xml")))):
     filename = os.path.basename(sample)
     shutil.copy(
         sample,
