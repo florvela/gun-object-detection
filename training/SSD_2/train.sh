@@ -1,4 +1,4 @@
-python train.py \
+python3 train.py \
 configs/ssd300_vgg16_pascal-voc-07-12.json \
 datasets/training_ready/images \
 datasets/training_ready/labels \
