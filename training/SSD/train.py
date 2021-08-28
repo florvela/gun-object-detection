@@ -1,26 +1,9 @@
 import os
 import json
-from tensorflow.keras.optimizers import SGD, Adam
+from tensorflow.keras.optimizers import SGD
 from utils import ModelCheckpoint
 from utils import training_utils
 
-# args = {
-#     'config': './configs/vgg16_flor.json',
-#     'images_dir': './datasets/SasankYadati-Guns-Dataset-0eb7329/Images/',
-#     'labels_dir': './datasets/SasankYadati-Guns-Dataset-0eb7329/Labels/',
-#     'training_split': './datasets/SasankYadati-Guns-Dataset-0eb7329/train_split_file.csv',
-#     'validation_split': './datasets/SasankYadati-Guns-Dataset-0eb7329/val_split_file.csv',
-#     'label_maps': ['gun'],
-#     'checkpoint': None, # can be an existing h5 to load weights from and continue training
-#     #'checkpoint_type': 'epoch',
-#     'checkpoint_frequency': 1,
-#     'learning_rate': 10e-3,
-#     'epochs': 100,
-#     'batch_size': 32,
-#     'shuffle': True,
-#     'augment': True,
-#     'output_dir': 'output'
-# }
 args = {
     'config': './configs/vgg16_flor.json',
     'images_dir': './datasets/',
@@ -32,9 +15,9 @@ args = {
     'checkpoint_type': 'epoch',
     'checkpoint_frequency': 10,
     'initial_epoch': 0,
-    'learning_rate': 0.001,
+    'learning_rate': 0.001, #de aca https://towardsdatascience.com/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0
     'epochs': 100,
-    'batch_size': 3,
+    'batch_size': 3, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
     'shuffle': True,
     'augment': True,
     'output_dir': '/content/drive/MyDrive/ssd_train_output_3_batches_augmented'
