@@ -148,3 +148,4 @@ cp_ep_*
 
 training/SSD_2/datasets/*
 training/SSD_2/output/*
+training/SSD/output/32_batches_001_lr_augmented/cp_ep_100_loss_6.5782.h5
