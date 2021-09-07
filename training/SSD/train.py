@@ -16,11 +16,11 @@ args = {
     'checkpoint_frequency': 10,
     'initial_epoch': 0,
     'learning_rate': 0.001, #de aca https://towardsdatascience.com/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0
-    'epochs': 100,
-    'batch_size': 32, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
+    'epochs': 300,
+    'batch_size': 3, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
     'shuffle': True,
     'augment': True,
-    'output_dir': '/mnt4/flor/git/otros/gun-object-detection/training/SSD/output/32_batches_001_lr_augmented'
+    'output_dir': '/mnt4/flor/git/otros/gun-object-detection/training/SSD/output/3_batches_001_lr_augmented'
 }
 
 # https://github.com/Socret360/object-detection-in-keras/tree/master/utils/ssd_utils
