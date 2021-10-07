@@ -20,7 +20,7 @@ args = {
     'batch_size': 64, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
     'shuffle': True,
     'augment': False,
-    'output_dir': '/mnt4/flor/git/otros/gun-object-detection/training/SSD/output/3_batches_001_lr_augmented'
+    'output_dir': '/content/drive/MyDrive/ssd_train_output_64_batches_001_lr_not_augmented'
 }
 
 # https://github.com/Socret360/object-detection-in-keras/tree/master/utils/ssd_utils
