@@ -21,6 +21,7 @@ api = Api(app)
 
 lock = threading.Lock()
 
+COLORS = [(0, 255, 255), (255, 255, 0), (0, 255, 0), (255, 0, 0)]
 
 def data_uri_to_cv2_img(uri):
     encoded_data = uri.split(',')[1]
@@ -100,48 +101,81 @@ ssd_model = SSD_model()
 YOLOv4_model = YOLOv4_model()
 
 
+def predict_SSD(img):
+    image = cv2.resize(img, (ssd_model.input_size, ssd_model.input_size))
+    image_height, image_width, _ = img.shape
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image = ssd_model.process_input_fn(image)
+    image = np.expand_dims(image, axis=0)
+
+    height_scale, width_scale = ssd_model.input_size / image_height, ssd_model.input_size / image_width
+    y_pred = ssd_model.model.predict(image)
+
+    temp = ["bg"] + ssd_model.class_names
+    classes, class_names, scores, boxes = [], [], [], []
+
+    for pred in y_pred[0]:
+        class_name = temp[int(pred[0])]
+        if pred[1] >= ssd_model.THRESHS[class_name]:
+            classes.append(int(pred[0]))
+            class_names.append(temp[int(pred[0])])
+            scores.append(pred[1].astype(float))
+            xmin = max(int(pred[2] / width_scale), 1)
+            ymin = max(int(pred[3] / height_scale), 1)
+            xmax = min(int(pred[4] / width_scale), image_width - 1)
+            ymax = min(int(pred[5] / height_scale), image_height - 1)
+            boxes.append([xmin, ymin, xmax - xmin, ymax - ymin])
+
+    if class_names:
+        res = {"decisions": "threat detected",
+               "detections": {
+                   "classes": class_names,
+                   "scores": scores,
+                   "boxes": boxes,
+                   "class_ids": classes,
+                   "thresh": ssd_model.CONFIDENCE_THRESHOLD
+               }}
+    else:
+        res = {"decisions": "no threat detected"}
+
+    return res
+
+def predict_YOLO(img):
+    classes, scores, boxes = YOLOv4_model.model.detect(img, YOLOv4_model.CONFIDENCE_THRESHOLD,
+                                                       YOLOv4_model.NMS_THRESHOLD)
+    class_names, res_classes, res_scores, res_boxes, res_thresholds = [], [], [], [], []
+    if type(classes) != tuple:
+        for i, _class in enumerate(classes):
+            if scores[i][0] >= YOLOv4_model.THRESHS[YOLOv4_model.class_names[_class[0]]]:
+                class_names.append(YOLOv4_model.class_names[_class[0]])
+                res_scores.append(scores[i][0].astype(float))
+                res_classes.append(int(_class[0]))
+                res_boxes.append(boxes[i].astype(int).tolist())
+                res_thresholds.append(YOLOv4_model.THRESHS[YOLOv4_model.class_names[_class[0]]])
+
+    if class_names:
+        res = {"decisions": "threat detected",
+               "detections": {
+                   "classes": class_names,
+                   "scores": res_scores,
+                   "boxes": res_boxes,
+                   "class_ids": res_classes,
+                   "thresholds": res_thresholds
+               }}
+    else:
+        res = {"decisions": "no threat detected"}
+
+    return res
+
 class YOLOv4_resource(Resource):
 
     def post(self):
         r = request
-        # print(r, file=sys.stdout)
-        # print(r.data, file=sys.stdout)
-        # convert string of image data to uint8
-        r_data = json.loads(r.data.decode('utf-8'))
-        uri = r_data["imageSrc"]
-
-        img = data_uri_to_cv2_img(uri)
-        # nparr = np.fromstring(r_data, np.uint8)
+        nparr = np.fromstring(r_data, np.uint8)
         # decode image
-        # img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        classes, scores, boxes = YOLOv4_model.model.detect(img, YOLOv4_model.CONFIDENCE_THRESHOLD, YOLOv4_model.NMS_THRESHOLD)
-        class_names, res_classes, res_scores, res_boxes, res_thresholds = [], [], [], [], []
-        if type(classes) != tuple:
-            for i, _class in enumerate(classes):
-                if scores[i][0] >= YOLOv4_model.THRESHS[YOLOv4_model.class_names[_class[0]]]:
-                    class_names.append(YOLOv4_model.class_names[_class[0]])
-                    res_scores.append(scores[i][0].astype(float))
-                    res_classes.append(int(_class[0]))
-                    res_boxes.append(boxes[i].astype(int).tolist())
-                    res_thresholds.append(YOLOv4_model.THRESHS[YOLOv4_model.class_names[_class[0]]])
-
-        if class_names:
-            res = {"decisions": "threat detected",
-                   "detections": {
-                       "classes": class_names,
-                       "scores": res_scores,
-                       "boxes": res_boxes,
-                       "class_ids": res_classes,
-                       "thresholds": res_thresholds
-                   }}
-        else:
-            res = {"decisions": "no threat detected"}
-
-        res = {'decisions': 'threat detected', 'detections': {'classes': ['SHOTGUN'], 'scores': [0.9819242358207703], 'boxes': [[89, 82, 83, 56]], 'class_ids': [1], 'thresholds': [0.8]}}
-        print(res, file=sys.stdout)
-        return jsonify(res) #TODO
-
-
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        res = predict_YOLO(img)
+        return jsonify(res)
 
 class SSD_resource(Resource):
 
@@ -151,42 +185,7 @@ class SSD_resource(Resource):
         nparr = np.fromstring(r.data, np.uint8)
         # decode image
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        image = cv2.resize(img, (ssd_model.input_size, ssd_model.input_size))
-        image_height, image_width, _ = img.shape
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = ssd_model.process_input_fn(image)
-        image = np.expand_dims(image, axis=0)
-
-        height_scale, width_scale = ssd_model.input_size / image_height, ssd_model.input_size / image_width
-        y_pred = ssd_model.model.predict(image)
-
-        temp = ["bg"] + ssd_model.class_names
-        classes, class_names, scores, boxes = [], [], [], []
-
-        for pred in y_pred[0]:
-            class_name = temp[int(pred[0])]
-            if pred[1] >= ssd_model.THRESHS[class_name]:
-                classes.append(int(pred[0]))
-                class_names.append(temp[int(pred[0])])
-                scores.append(pred[1].astype(float))
-                xmin = max(int(pred[2] / width_scale), 1)
-                ymin = max(int(pred[3] / height_scale), 1)
-                xmax = min(int(pred[4] / width_scale), image_width - 1)
-                ymax = min(int(pred[5] / height_scale), image_height - 1)
-                boxes.append([xmin, ymin, xmax - xmin, ymax - ymin])
-
-        if class_names:
-            res = {"decisions": "threat detected",
-                   "detections": {
-                       "classes": class_names,
-                       "scores": scores,
-                       "boxes": boxes,
-                       "class_ids": classes,
-                       "thresh": ssd_model.CONFIDENCE_THRESHOLD
-                   }}
-        else:
-            res = {"decisions": "no threat detected"}
-
+        res = predict_SSD(img)
         return jsonify(res)
 
 
@@ -195,6 +194,9 @@ def generate():
     global lock
     # initialize the video stream
     vc = cv2.VideoCapture(0)
+    vc.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+    # FPS = 1 / 30
+    # FPS_MS = int(FPS * 1000)
 
     # check camera is open
     if vc.isOpened():
@@ -212,7 +214,31 @@ def generate():
             if frame is None:
                 continue
 
-            
+            data = predict_SSD(frame)
+            if "detections" in data:
+                detections = data["detections"]
+                classids, classes, scores, boxes = detections["class_ids"], detections["classes"], detections["scores"], \
+                                                   detections["boxes"]
+                for (classid, class_name, score, box) in zip(classids, classes, scores, boxes):
+                    color = COLORS[int(classid) % len(COLORS)]
+                    color = COLORS[1]
+                    label = "[SSD] %s : %f" % (class_name, score)
+                    print(label)
+                    cv2.rectangle(frame, box, color, 2)
+                    cv2.putText(frame, label, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+
+            data = predict_YOLO(frame)
+            if "detections" in data:
+                detections = data["detections"]
+                classids, classes, scores, boxes = detections["class_ids"], detections["classes"], detections["scores"], \
+                                                   detections["boxes"]
+                for (classid, class_name, score, box) in zip(classids, classes, scores, boxes):
+                    color = COLORS[int(classid) % len(COLORS)]
+                    color = COLORS[0]
+                    label = "[YOLO] %s : %f" % (class_name, score)
+                    print(label)
+                    cv2.rectangle(frame, box, color, 2)
+                    cv2.putText(frame, label, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
 
             # encode the frame in JPEG format
             (flag, encodedImage) = cv2.imencode(".jpg", frame)
@@ -246,6 +272,6 @@ api.add_resource(Stream_resource, '/stream')
 if __name__ == '__main__':
    host = "127.0.0.1"
    port = 8000
-   debug = True
+   debug = False
    options = None
    app.run(host, port, debug, options)
