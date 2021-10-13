@@ -1,17 +1,33 @@
 from scorers_configs import get_config
-from flask import jsonify
+from flask import jsonify, make_response
 from flask_restful import Resource, Api
 from flask import Flask, request
 import cv2
 import json
 import numpy as np
 from ssd_utils.utils import inference_utils
+from flask_cors import CORS
+import sys
+import base64
+from flask import Flask, Response
+import cv2
+import threading
 
 # creating the flask app
 app = Flask(__name__)
+CORS(app)
 # creating an API object
 api = Api(app)
 
+lock = threading.Lock()
+
+
+def data_uri_to_cv2_img(uri):
+    encoded_data = uri.split(',')[1]
+    buf_decode = base64.b64decode(encoded_data)
+    nparr = np.fromstring(buf_decode, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    return img
 
 class Hello(Resource):
 
@@ -24,7 +40,8 @@ class Hello(Resource):
     # Corresponds to POST request
     def post(self):
         data = request.get_json()  # status code
-        return jsonify({'data': data}), 201
+        return make_response(jsonify({'data': data}), 201)
+        # return jsonify(), 201
 
 
 class SSD_model():
@@ -87,10 +104,16 @@ class YOLOv4_resource(Resource):
 
     def post(self):
         r = request
+        # print(r, file=sys.stdout)
+        # print(r.data, file=sys.stdout)
         # convert string of image data to uint8
-        nparr = np.fromstring(r.data, np.uint8)
+        r_data = json.loads(r.data.decode('utf-8'))
+        uri = r_data["imageSrc"]
+
+        img = data_uri_to_cv2_img(uri)
+        # nparr = np.fromstring(r_data, np.uint8)
         # decode image
-        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        # img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         classes, scores, boxes = YOLOv4_model.model.detect(img, YOLOv4_model.CONFIDENCE_THRESHOLD, YOLOv4_model.NMS_THRESHOLD)
         class_names, res_classes, res_scores, res_boxes, res_thresholds = [], [], [], [], []
         if type(classes) != tuple:
@@ -114,6 +137,8 @@ class YOLOv4_resource(Resource):
         else:
             res = {"decisions": "no threat detected"}
 
+        res = {'decisions': 'threat detected', 'detections': {'classes': ['SHOTGUN'], 'scores': [0.9819242358207703], 'boxes': [[89, 82, 83, 56]], 'class_ids': [1], 'thresholds': [0.8]}}
+        print(res, file=sys.stdout)
         return jsonify(res) #TODO
 
 
@@ -165,11 +190,62 @@ class SSD_resource(Resource):
         return jsonify(res)
 
 
+def generate():
+    # grab global references to the lock variable
+    global lock
+    # initialize the video stream
+    vc = cv2.VideoCapture(0)
+
+    # check camera is open
+    if vc.isOpened():
+        rval, frame = vc.read()
+    else:
+        rval = False
+
+    # while streaming
+    while rval:
+        # wait until the lock is acquired
+        with lock:
+            # read next frame
+            rval, frame = vc.read()
+            # if blank frame
+            if frame is None:
+                continue
+
+            
+
+            # encode the frame in JPEG format
+            (flag, encodedImage) = cv2.imencode(".jpg", frame)
+
+            # ensure the frame was successfully encoded
+            if not flag:
+                continue
+
+        # yield the output frame in the byte format
+        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
+    # release the camera
+    vc.release()
+
+class Stream_resource(Resource):
+
+    def get(self):
+        return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
+
+
 # adding the defined resources along with their corresponding urls
 api.add_resource(Hello, '/')
 api.add_resource(YOLOv4_resource, '/api/v1/yolov4')
 api.add_resource(SSD_resource, '/api/v1/ssd')
+api.add_resource(Stream_resource, '/stream')
 
 # driver function
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+   host = "127.0.0.1"
+   port = 8000
+   debug = True
+   options = None
+   app.run(host, port, debug, options)
