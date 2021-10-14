@@ -2,48 +2,34 @@ import os
 import json
 import pdb
 import numpy as np
-# import argparse
+import argparse
 from glob import glob
 import matplotlib.pyplot as plt
 from utils import bbox_utils
-"""
--- 1: 39.18%
--- 2: 64.10%
--- 3: 24.82%
-mAP: 42.70%
-"""
-args = {
-    "images_dir":"datasets/test/",
-    "labels_dir":"",
-    "predictions_dir":"datasets/predictions/789_sin_confidence/",
-    "split_file":"",
-    "label_maps":"",
-    "output_dir":"output/evaluations/cp_ep_300_loss_5.3551.h5",
-    "iou_threshold":0.4
-}
 
-# parser = argparse.ArgumentParser(
-#     description='Start the evaluation process of a particular network.')
-# parser.add_argument('images_dir', type=str, help='path to images dir.')
+
+
+parser = argparse.ArgumentParser(
+    description='Start the evaluation process of a particular network.')
+parser.add_argument('images_dir', type=str, help='path to images dir.')
 # parser.add_argument('labels_dir', type=str, help='pathXZ to labels dir.')
-# parser.add_argument('predictions_dir', type=str, help='path to the predictions dir.')
+parser.add_argument('predictions_dir', type=str, help='path to the predictions dir.')
 # parser.add_argument('split_file', type=str, help='path to the split file.')
 # parser.add_argument('--label_maps', type=str, help='path to label maps file.')
-# parser.add_argument('--output_dir', type=str,
-#                     help='path to output file.', default="output")
-# parser.add_argument("--iou_threshold", type=float, help="iou between gt box and pred box to be counted as a positive.", default=0.5)
-# args = parser.parse_args()
-#
-# assert os.path.exists(args.images_dir), "images_dir does not exist"
+parser.add_argument('--output_dir', type=str, help='path to output file.', default="output")
+parser.add_argument("--iou_threshold", type=float, help="iou between gt box and pred box to be counted as a positive.", default=0.5)
+args = parser.parse_args()
+
+assert os.path.exists(args.images_dir), "images_dir does not exist"
 # assert os.path.exists(args.labels_dir), "labels_dir does not exist"
-# assert os.path.exists(args["predictions_dir"]), "predictions_dir does not exist"
+assert os.path.exists(args.predictions_dir), "predictions_dir does not exist"
 # assert os.path.exists(args.split_file), "split_file does not exist"
-# assert args.iou_threshold > 0, "iou_threshold must be larger than zeros"
+assert args.iou_threshold > 0, "iou_threshold must be larger than zeros"
 
-if not os.path.exists(args["output_dir"]):
-    os.makedirs(args["output_dir"])
+if not os.path.exists(args.output_dir):
+    os.makedirs(args.output_dir)
 
-prediction_files = glob(os.path.join(args["predictions_dir"], "*txt"))
+prediction_files = glob(os.path.join(args.predictions_dir, "*txt"))
 
 predictions_dict = {}
 for prediction_file in prediction_files:
@@ -57,7 +43,7 @@ for prediction_file in prediction_files:
         predictions = [{
             "class": p[0],
             "confidence_score": float(p[1]),
-            "bbox": [int(p[2]), int(p[3]), int(p[4]), int(p[5])] #[int(p[2]), int(p[3]), int(float(p[4])-float(p[2])), int(float(p[5])-float(p[3]))],
+            "bbox": [int(p[2]), int(p[3]), int(p[2])+int(p[4]), int(p[3])+int(p[5])] #[int(p[2]), int(p[3]), int(p[2])+int(p[4]), int(p[3])+int(p[5])] #[int(p[2]), int(p[3]), int(float(p[4])-float(p[2])), int(float(p[5])-float(p[3]))],
         } for p in predictions]
         predictions_dict[filename] = predictions
 
@@ -73,77 +59,53 @@ for img in data["images"]:
 
 import cv2
 ground_truths_dict = {}
+label_maps = ["","KNIFE","GUN","RIFLE"]
 for annotation in annotations:
     key = images_dict[annotation["image_id"]]
-    if key not in ground_truths_dict:
-        ground_truths_dict[key]= []
-    x = annotation["bbox"]
-    ground_truths_dict[key].append({
-        "class": annotation["category_id"],
-        "bbox": [x[0],x[1],x[2],x[3]]
-    })
-    # COLORS = [(0, 255, 255), (255, 255, 0), (0, 255, 0), (255, 0, 0)]
-    #
-    # color = COLORS[1]
-    # label = "[SSD] %s" % (str(annotation["category_id"]))
-    # print(label)
-    # test_images_path = "./datasets/test/"
-    # frame = cv2.imread(test_images_path + key)
-    # box = [x[0],x[1],x[2],x[3]]
-    # cv2.rectangle(frame, box, color, 2)
-    # cv2.putText(frame, label, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
-    # cv2.imshow("detections", frame)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    # pdb.set_trace()
+    if key in predictions_dict:
+        if key not in ground_truths_dict:
+            # print(key)
+            ground_truths_dict[key]= []
+        x = annotation["bbox"]
+        ground_truths_dict[key].append({
+            "class": label_maps[int(annotation["category_id"])],
+            "bbox": [x[0],x[1],x[0]+x[2],x[1]+x[3]]
+        })
 
-
-# ground_truths_dict = {}
-# samples = data_utils.get_samples_from_split(args.split_file, args.images_dir, args.labels_dir)
-# for sample in samples:
-#     _, label_path = sample.split(" ")
-#     filename = os.path.basename(label_path)
-#     filename = filename[:filename.index(".")]
-#     bboxes, classes = pascal_voc_utils.read_label(label_path.strip("\n"))
-#     ground_truths = list(zip(classes, bboxes))
-#     ground_truths_dict[filename] = [{
-#         "class": g[0],
-#         "bbox": [int(i) for i in g[1]],
-#     } for g in ground_truths]
+# pdb.set_trace()
 
 assert len(list(ground_truths_dict.keys())) == len(list(predictions_dict.keys())), "prediction files does not equal to ground truth files"
 
 
 aps = []
 metrics = {}
-label_maps = [1,2,3]
+label_maps = ["KNIFE","GUN","RIFLE"]
 
 
 for classname in label_maps:
     detections = []
     all_ground_truths = 0
     for filename in list(predictions_dict.keys()):
-        predictions_in_file = [p for p in predictions_dict[filename] if float(p["class"]) == classname]
-        # print(predictions_dict[filename])
-        ground_truth_in_file = [g for g in ground_truths_dict[filename] if float(g["class"]) == classname]
+        predictions_in_file = [p for p in predictions_dict[filename] if p["class"] == classname]
+        ground_truth_in_file = [g for g in ground_truths_dict[filename] if g["class"] == classname]
 
         all_ground_truths += len(ground_truth_in_file)
 
         gt_pred_matrix = np.zeros((len(ground_truth_in_file), len(predictions_in_file)))
-        # pdb.set_trace()
         for pred_i, pred in enumerate(predictions_in_file):
             for gt_i, gt in enumerate(ground_truth_in_file):
-                # p rint(gt["bbox"], pred["bbox"])
                 gt_pred_matrix[gt_i][pred_i] = bbox_utils.iou(
                     np.expand_dims(pred["bbox"], axis=0),
                     np.expand_dims(gt["bbox"], axis=0),
                 )[0]
+                # xmin, ymin, xmax, ymax = pred["bbox"][0], pred["bbox"][1], pred["bbox"][0]+pred["bbox"][2], pred["bbox"][1]+pred["bbox"][3]
+                # gt_xmin, gt_ymin, gt_xmax, gt_ymax = gt["bbox"][0], gt["bbox"][1], gt["bbox"][0]+gt["bbox"][2], gt["bbox"][1]+gt["bbox"][3]
                 # print(bbox_utils.iou(
-                #     np.expand_dims(gt["bbox"], axis=0),
                 #     np.expand_dims(pred["bbox"], axis=0),
-                # ))
+                #     np.expand_dims(gt["bbox"], axis=0),
+                # )[0])
 
-        t = np.where(gt_pred_matrix >= args["iou_threshold"], 1, 0)
+        t = np.where(gt_pred_matrix >= args.iou_threshold, 1, 0)
         for gt_i in range(t.shape[0]):
             row = t[gt_i]
             true_positives_per_gt = np.argwhere(row == 1)
@@ -210,7 +172,7 @@ for classname in label_maps:
     plt.legend()
     plt.grid()
     # plt.show()
-    plt.savefig(os.path.join(args["output_dir"], f"{str(classname).lower()}_ap-{'%.2f' % ap}.png"))
+    plt.savefig(os.path.join(args.output_dir, f"{str(classname).lower()}_ap-{'%.2f' % ap}.png"))
 
 
 aps = np.array(aps)
@@ -227,4 +189,4 @@ plt.ylabel("Precision")
 plt.xlim(-0.1, 1.1)
 plt.ylim(-0.1, 1.1)
 plt.grid()
-plt.savefig(os.path.join(args["output_dir"], f"_all_map-{'%.2f' % mAP}.png"))
+plt.savefig(os.path.join(args.output_dir, f"_all_map-{'%.2f' % mAP}.png"))
