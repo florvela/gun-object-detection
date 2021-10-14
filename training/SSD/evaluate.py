@@ -21,6 +21,7 @@ predictions_dir_parent = args.predictions_dir
 for elem in os.listdir(predictions_dir_parent):
     predictions_dir = predictions_dir_parent + elem
     output_dir = args.output_dir + "/" + elem
+    print(elem)
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -68,15 +69,11 @@ for elem in os.listdir(predictions_dir_parent):
                 "bbox": [x[0],x[1],x[0]+x[2],x[1]+x[3]]
             })
 
-    # pdb.set_trace()
-
     assert len(list(ground_truths_dict.keys())) == len(list(predictions_dict.keys())), "prediction files does not equal to ground truth files"
-
 
     aps = []
     metrics = {}
     label_maps = ["KNIFE","GUN","RIFLE"]
-
 
     for classname in label_maps:
         detections = []
