@@ -59,7 +59,7 @@ for i, image_id in enumerate(images_ids):
         xml_object_bndbox_ymin = ET.SubElement(xml_object_bndbox, "ymin").text = str(bbox[1])
         xml_object_bndbox_xmax = ET.SubElement(xml_object_bndbox, "xmax").text = str(bbox[0] + bbox[2])
         xml_object_bndbox_ymax = ET.SubElement(xml_object_bndbox, "ymax").text = str(bbox[1] + bbox[3])
-        
+
         # xml_tree = ET.ElementTree(xml_root)
         # xml_file_name = f"{image_filename[:image_filename.index('.')]}.xml"
         # with open(os.path.join(args.output_dir, xml_file_name), "wb+") as xml_file:
