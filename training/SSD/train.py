@@ -1,6 +1,6 @@
 import os
 import json
-from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.optimizers import SGD, Adam
 from utils import ModelCheckpoint
 from utils import training_utils
 
@@ -13,11 +13,11 @@ args = {
     'label_maps': ['0', '1', 'Shotgun'],
     'checkpoint': None, #'/content/drive/MyDrive/ssd_train_output_64_batches_001_lr_not_augmented/cp_ep_160_loss_4.9648.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_100_loss_7.3720.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_30_loss_11.7435.h5', #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
-    'checkpoint_frequency': 50,
+    'checkpoint_frequency': 10,
     'initial_epoch': 0,
-    'learning_rate': 0.001, #de aca https://towardsdatascience.com/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0
+    'learning_rate': 0.0001, #de aca https://towardsdatascience.com/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0
     'epochs': 300,
-    'batch_size': 64, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
+    'batch_size': 10, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
     'shuffle': True,
     'augment': True,
     'output_dir': '/content/drive/MyDrive/ssd_train_output_64_batches_001_lr_augmented'
@@ -42,13 +42,19 @@ with open(args["config"], "r") as config_file:
 training_data_generator, num_training_samples, validation_data_generator, num_validation_samples = training_utils.get_data_generator(config, args)
 model = training_utils.get_model(config, args["label_maps"])
 loss = training_utils.get_loss(config)
-optimizer = SGD(
+# optimizer = SGD(
+#             learning_rate=args["learning_rate"],
+#             momentum=0.9,
+#             decay=0.0005,
+#             nesterov=False
+#         )
+
+optimizer = Adam(
             learning_rate=args["learning_rate"],
             momentum=0.9,
             decay=0.0005,
             nesterov=False
         )
-
 
 model.compile(optimizer=optimizer, loss=loss.compute)
 
