@@ -11,15 +11,15 @@ args = {
     'training_split': './datasets/train/split.txt',
     'validation_split':  './datasets/valid/split.txt',
     'label_maps': ['0', '1', 'Shotgun'],
-    'checkpoint': '/content/drive/MyDrive/ssd_train_output_64_batches_001_lr_not_augmented/cp_ep_160_loss_4.9648.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_100_loss_7.3720.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_30_loss_11.7435.h5', #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
+    'checkpoint': None, #'/content/drive/MyDrive/ssd_train_output_64_batches_001_lr_not_augmented/cp_ep_160_loss_4.9648.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_100_loss_7.3720.h5', #'/content/drive/MyDrive/ssd_train_output/cp_ep_30_loss_11.7435.h5', #'./output_2/cp_ep_100_loss_17.3806.h5', # can be an existing h5 to load weights from and continue training
     'checkpoint_type': 'epoch',
     'checkpoint_frequency': 10,
-    'initial_epoch': 160,
+    'initial_epoch': 0,
     'learning_rate': 0.001, #de aca https://towardsdatascience.com/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0
     'epochs': 300,
     'batch_size': 64, # https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
     'shuffle': True,
-    'augment': False,
+    'augment': True,
     'output_dir': '/content/drive/MyDrive/ssd_train_output_64_batches_001_lr_not_augmented'
 }
 
