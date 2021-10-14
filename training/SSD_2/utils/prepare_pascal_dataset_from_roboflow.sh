@@ -1,1 +1,0 @@
-python3 prepare_pascal_dataset_from_roboflow.py ../datasets ../datasets/training_ready
