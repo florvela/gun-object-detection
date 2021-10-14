@@ -147,5 +147,6 @@ cp_ep_*
 *.jpg
 
 training/SSD_2/datasets/*
+training/SSD/output/*
 training/SSD_2/output/*
 training/SSD/output/32_batches_001_lr_augmented/cp_ep_100_loss_6.5782.h5
