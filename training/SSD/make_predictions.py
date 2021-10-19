@@ -14,8 +14,8 @@ def test(test_config, only_pred_imgs=True):
         'config': './configs/vgg16_flor.json',
         'weights': weights,
         'label_maps': ['KNIFE', 'GUN', 'RIFLE'],
-        'thresholds': [0.7, 0.8, 0.8],
-        'confidence_threshold': 0.7,
+        'thresholds': [0.5, 0.5, 0.5],
+        'confidence_threshold': 0.5,
         'num_predictions': 10,
         'show_class_label': True
     }

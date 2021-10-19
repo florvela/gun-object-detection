@@ -19,7 +19,7 @@ def get_config(model):
             "model_type": "yolo",
             "input_width": 416,
             "input_height": 416,
-            "confidence_threshold": 0.7,
+            "confidence_threshold": 0.5,
             "nms_threshold": 0.5,
             "weights_path": args.weights_file,
             "cfg_path": args.cfg_path,
