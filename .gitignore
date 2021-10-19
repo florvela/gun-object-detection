@@ -145,7 +145,7 @@ cp_ep_*
 *.weights
 *.h5
 *.jpg
-
+training/datasets/*
 training/SSD_2/datasets/*
 training/SSD/output/*
 training/SSD_2/output/*
