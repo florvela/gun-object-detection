@@ -1,4 +1,4 @@
-from networks import SSD_VGG16, SSD_VGG19
+from networks import SSD_VGG16
 
 def get_model(config, label_maps):
     model_config = config["model"]
