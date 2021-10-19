@@ -49,12 +49,20 @@ loss = training_utils.get_loss(config)
 #             nesterov=False
 #         )
 
+# optimizer = SGD(
+#             learning_rate=args["learning_rate"],
+#             momentum=0.9,
+#             decay=0.0005,
+#             nesterov=False
+#         )
+
 optimizer = Adam(
-            learning_rate=args["learning_rate"],
-            momentum=0.9,
-            decay=0.0005,
-            nesterov=False
-        )
+    learning_rate=args["learning_rate"],
+    beta_1=0.9,
+    beta_2=0.999,
+    epsilon=1e-07,
+    amsgrad=False
+)
 
 model.compile(optimizer=optimizer, loss=loss.compute)
 
