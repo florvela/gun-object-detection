@@ -6,22 +6,35 @@ import argparse
 from glob import glob
 import matplotlib.pyplot as plt
 from utils import bbox_utils
-
+import pandas as pd
+import pdb
 
 parser = argparse.ArgumentParser(description='Start the evaluation process of a particular network.')
 parser.add_argument('predictions_dir', type=str, help='path to the predictions dir.')
 parser.add_argument('output_dir', type=str, help='path to output file.', default="output")
 parser.add_argument("--iou_threshold", type=float, help="iou between gt box and pred box to be counted as a positive.", default=0.5)
+parser.add_argument("--set", type=str, help="set to evaluate", default="test")
 args = parser.parse_args()
 
 assert os.path.exists(args.predictions_dir), "predictions_dir does not exist"
 assert args.iou_threshold > 0, "iou_threshold must be larger than zeros"
+df = pd.DataFrame()
 
 predictions_dir_parent = args.predictions_dir
 for elem in os.listdir(predictions_dir_parent):
     predictions_dir = predictions_dir_parent + elem
     output_dir = args.output_dir + "/" + elem
     print(elem)
+
+    csv_row = dict()
+    model_type, batches, learning_rate, optimizer, epochs, augmented_flag = elem.split("_")
+    csv_row["model_type"] = model_type
+    csv_row["batches"] = batches
+    csv_row["learning_rate"] = learning_rate
+    csv_row["optimizer"] = optimizer
+    csv_row["epochs"] = epochs
+    csv_row["augmented_flag"] = augmented_flag
+
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -44,7 +57,10 @@ for elem in os.listdir(predictions_dir_parent):
             } for p in predictions]
             predictions_dict[filename] = predictions
 
-    coco_annotations = "datasets/test/_annotations.coco.json"
+    if args.set == "valid":
+        coco_annotations = "datasets/valid/_annotations.coco.json"
+    else:
+        coco_annotations = "datasets/test/_annotations.coco.json"
     f = open(coco_annotations, )
     data = json.load(f)
     annotations = [ann for ann in data["annotations"]]
@@ -153,6 +169,7 @@ for elem in os.listdir(predictions_dir_parent):
         }
 
         print(f"-- {classname}: {'%.2f' % (ap * 100)}%")
+        csv_row[classname] = f'%.2f' % (ap * 100)
 
         plt.figure(figsize=(7, 7))
         plt.xlim(-0.1, 1.1)
@@ -171,6 +188,9 @@ for elem in os.listdir(predictions_dir_parent):
     aps = np.array(aps)
     mAP = aps.mean()
     print(f"mAP: {'%.2f' % (mAP * 100)}%")
+    csv_row["mAP"] = f'%.2f' % (mAP * 100)
+
+    df = df.append(csv_row, ignore_index=True)
 
     plt.figure(figsize=(7, 7))
     for classname in metrics.keys():
@@ -183,3 +203,5 @@ for elem in os.listdir(predictions_dir_parent):
     plt.ylim(-0.1, 1.1)
     plt.grid()
     plt.savefig(os.path.join(output_dir, f"_all_map-{'%.2f' % mAP}.png"))
+
+df.to_csv(f"{args.set} evaluation_results.csv", index=False)
