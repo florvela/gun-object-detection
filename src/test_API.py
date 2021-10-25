@@ -2,10 +2,11 @@
 import requests
 import json
 import cv2
+import os
 
 COLORS = [(0, 255, 255), (255, 255, 0), (0, 255, 0), (255, 0, 0)]
 
-addr = "http://127.0.0.1:5000"
+addr = "http://127.0.0.1:8000"
 test_url = addr + '/api/v1/yolov4'
 ssd_url = addr + '/api/v1/ssd'
 
@@ -14,9 +15,10 @@ content_type = 'image/jpeg'
 headers = {'content-type': content_type}
 
 frames = ["test1.jpg","test2.jpg","test3.jpg","test4.jpg"]
+frames = os.listdir("./images")
 for f in frames:
-    frame = cv2.imread(f)
-    print(frame.shape)
+    frame = cv2.imread("images/"+f)
+    print("images/"+f+"----------------------------")
     # encode image as jpeg
     _, img_encoded = cv2.imencode('.jpg', frame)
     # send http request with image and receive response
@@ -25,6 +27,7 @@ for f in frames:
     data = r.json()
     if "detections" in data:
         detections = data["detections"]
+        print(detections)
         classids, classes, scores, boxes = detections["class_ids"], detections["classes"], detections["scores"], detections["boxes"]
         for (classid, class_name, score, box) in zip(classids, classes, scores, boxes):
             color = COLORS[int(classid) % len(COLORS)]
