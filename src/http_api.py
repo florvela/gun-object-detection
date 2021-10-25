@@ -171,7 +171,7 @@ class YOLOv4_resource(Resource):
 
     def post(self):
         r = request
-        nparr = np.fromstring(r_data, np.uint8)
+        nparr = np.fromstring(r.data, np.uint8)
         # decode image
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         res = predict_YOLO(img)
@@ -263,10 +263,6 @@ api.add_resource(Hello, '/')
 api.add_resource(YOLOv4_resource, '/api/v1/yolov4')
 api.add_resource(SSD_resource, '/api/v1/ssd')
 api.add_resource(Stream_resource, '/stream')
-
-# driver function
-# if __name__ == '__main__':
-#     app.run(debug=True)
 
 
 if __name__ == '__main__':
