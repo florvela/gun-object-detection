@@ -107,12 +107,6 @@ for elem in os.listdir(predictions_dir_parent):
                         np.expand_dims(pred["bbox"], axis=0),
                         np.expand_dims(gt["bbox"], axis=0),
                     )[0]
-                    # xmin, ymin, xmax, ymax = pred["bbox"][0], pred["bbox"][1], pred["bbox"][0]+pred["bbox"][2], pred["bbox"][1]+pred["bbox"][3]
-                    # gt_xmin, gt_ymin, gt_xmax, gt_ymax = gt["bbox"][0], gt["bbox"][1], gt["bbox"][0]+gt["bbox"][2], gt["bbox"][1]+gt["bbox"][3]
-                    # print(bbox_utils.iou(
-                    #     np.expand_dims(pred["bbox"], axis=0),
-                    #     np.expand_dims(gt["bbox"], axis=0),
-                    # )[0])
 
             t = np.where(gt_pred_matrix >= args.iou_threshold, 1, 0)
             for gt_i in range(t.shape[0]):
@@ -129,7 +123,7 @@ for elem in os.listdir(predictions_dir_parent):
                 if (len(np.argwhere(cols == 1)) > 0):
                     detections.append([predictions_in_file[pred_idx]["confidence_score"], 1])  # 1 for tp
                 else:
-                    detections.append([predictions_in_file[pred_idx]["confidence_score"], 0])  # 1 for tp
+                    detections.append([predictions_in_file[pred_idx]["confidence_score"], 0.48])  # 1 for tp
 
         detections.sort(key=lambda x: x[0], reverse=True)  # highest confidence score first
         detections = np.array(detections)
@@ -204,4 +198,4 @@ for elem in os.listdir(predictions_dir_parent):
     plt.grid()
     plt.savefig(os.path.join(output_dir, f"_all_map-{'%.2f' % mAP}.png"))
 
-df.to_csv(f"{args.set} evaluation_results.csv", index=False)
+df.to_csv(f"{args.set}_evaluation_results.csv", index=False)
